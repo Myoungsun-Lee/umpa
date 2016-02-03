@@ -1,7 +1,12 @@
 var React = require('react');
 var mui = require('material-ui');
 var {Avatar,
-  CardHeader} = mui;
+  CardHeader,
+  IconMenu,
+  MenuItem,
+  IconButton} = mui;
+
+var MoreVertIcon=require('./svg-icons/more-vert.jsx');
 var Colors = mui.Styles.Colors;
 
 var Crowns = require('./crowns.jsx');
@@ -9,6 +14,12 @@ var Ages = require('./ages.jsx');
 var Gender = require('./gender.jsx');
 
 var AskHeader = React.createClass({
+    getInitialState: function() {
+    return {
+      valueSingle: '1'
+    };
+  },
+
   render: function () {
      var styles = {
       author: {
@@ -20,6 +31,11 @@ var AskHeader = React.createClass({
         height:'72px',
         float:'right',
         paddingRight:'16px',
+      },
+      iconStyle: {
+        width:'36px',
+        height:'72px',
+        float:'right',
       },
     };
 
@@ -46,11 +62,20 @@ var AskHeader = React.createClass({
           subtitle={readable}
           showExpandableButton={true} />
         </div>
+        <div style={styles.iconStyle}>
+          <IconMenu iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+            onChange={this.handleChangeSingle}
+            value={this.state.valueSingle}>
+              <MenuItem value="1" primaryText="Refresh" />
+               <MenuItem value="2" primaryText="Send feedback" />
+          </IconMenu>
+        </div>
         <div style={styles.crownContainer}>
           <Crowns rank={rank}/>
           <Gender gender={gender}/>
           <Ages age={age}/>
         </div>
+
       </div>
     );
   },
@@ -95,6 +120,10 @@ var AskHeader = React.createClass({
       return <Avatar src="img/anonymous.png"></Avatar>;
 
     return <Avatar>A</Avatar>;
+  },
+
+  handleChangeSingle: function(event, value) {
+    this.setState({valueSingle: value});
   }
 
 });
