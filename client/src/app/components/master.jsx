@@ -43,6 +43,10 @@ var Master = React.createClass({
       tabIndex : '0',
       snackbarMessage : '',
       dialOpen : false,
+      notiHeight: '30px',
+      notiText: window.textSet.noti,
+      notiOpen: true,
+      notiOn: false,
     };
   },
 
@@ -70,7 +74,7 @@ var Master = React.createClass({
         var response = e.detail.res;
         window.fbLoginStatusCallback(response);
         clearTimeout(timeout);
-        this.setState({tabIndex: this._getSelectedIndex()});
+        this.setState({tabIndex: this._getSelectedIndex(), notiOn: true});
 
         if (window.location.href.indexOf('#') === -1 || window.location.href.split('#')[1] === "/") {
           this.context.router.transitionTo('new-asks');
@@ -81,7 +85,7 @@ var Master = React.createClass({
     document.addEventListener("fbUserInfo",
       function statusChangeCallback(e) {
         console.log('master fbUserInfo statusChangeCallback');
-        this.setState({snackbarMessage: window.textSet.loginToast + document.user.name});
+        this.setState({snackbarMessage: window.textSet.loginToast + document.user.name, notiOn: true});
         this.refs.snackbar.show();
       }.bind(this)
     );
@@ -93,7 +97,7 @@ var Master = React.createClass({
         var response = e.detail.res;
         window.kakaoLoginStatusCallback(response);
         clearTimeout(timeout);
-        this.setState({tabIndex: this._getSelectedIndex()});
+        this.setState({tabIndex: this._getSelectedIndex(), notiOn: true});
 
         if (window.location.href.indexOf('#') === -1 || window.location.href.split('#')[1] === "/") {
           this.context.router.transitionTo('new-asks');
@@ -104,7 +108,7 @@ var Master = React.createClass({
     document.addEventListener("kakaoUserInfo",
       function statusChangeCallback(e) {
         console.log('master fbUserInfo statusChangeCallback');
-        this.setState({snackbarMessage: window.textSet.loginToast + document.user.name});
+        this.setState({snackbarMessage: window.textSet.loginToast + document.user.name, notiOn: true});
         this.refs.snackbar.show();
       }.bind(this)
     );
@@ -125,7 +129,7 @@ var Master = React.createClass({
 
   componentWillReceiveProps: function() {
     console.log("master componentWillReceiveProps");
-    this.setState({tabIndex: this._getSelectedIndex()});
+    this.setState({tabIndex: this._getSelectedIndex(), notiOn: true});
   },
 
   _getSelectedIndex: function() {
@@ -152,7 +156,9 @@ var Master = React.createClass({
   },
 
   _onMainIconTouchTap: function() {
+    console.log("master _onMainIconTouchTap");
     window.location = window.location.href.split('#')[0];
+    this.setState({notiOn: false});
   },
 
   _getAppbar: function() {
@@ -256,6 +262,17 @@ var Master = React.createClass({
       logo: {
         width: 76,
         height: 20
+      },
+      notiStyle:{
+        backgroundColor: Colors.grey200,
+        color: Colors.black,
+        width: '100%',
+        height: this.state.notiHeight,
+        position: 'relative',
+        top: this.state.mobileView ? 93 : 44,
+        fontSize: 14,
+        paddingTop: 5,
+        textAlign: "center"  
       }
     };
 
@@ -298,7 +315,8 @@ var Master = React.createClass({
           value="1"
           label="NEW"
           style={newTabStyle}
-          route="new-asks" />
+          route="new-asks">
+        </Tab>
         <Tab
           value="2"
           label="HOT"
@@ -307,6 +325,13 @@ var Master = React.createClass({
       </Tabs>
     );
 
+    var paper = this.state.notiOn ? 
+    (     
+      <Paper style={styles.notiStyle} onTouchTap={this._notiOnOff}>
+        {this.state.notiText}
+      </Paper>
+    ) : null;
+  
     return (
       <div>
         <Paper
@@ -319,6 +344,7 @@ var Master = React.createClass({
           </div>
           {searchButton}
           {userSettingButton}
+          {paper}
         </Paper>
       </div>
     );
@@ -403,6 +429,16 @@ var Master = React.createClass({
 
   _loginClose: function() {
     this.setState({dialOpen: false});
+  },
+
+  _notiOnOff: function(){
+    console.log("before _notiOnOff " + this.state.notiOpen);
+    if (this.state.notiOpen === true) {
+      this.setState({notiHeight: '10px', notiText: "", notiOpen: false});
+    }
+    else{
+      this.setState({notiHeight: '29px', notiText: window.textSet.noti, notiOpen: true});
+    }
   },
 
 });
