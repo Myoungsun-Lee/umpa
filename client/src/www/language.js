@@ -37,6 +37,7 @@ function getTextSetByLanguege(language) {
       text.more = "더보기";
       text.tag = "태그를 입력해주세요";
       text.tagResult = "결과 없음, 다른 태그를 입력해주세요";
+      text.voteInfo = "투표는 더블클릭으로!! 재투표 불가!!";
       break;
     case "en" :
       text.login = "Sign in";
@@ -74,6 +75,7 @@ function getTextSetByLanguege(language) {
       text.more = "More"; 
       text.tag = "Please type #tag...";
       text.tagResult = "No result, please type another tag...";
+      text.voteInfo = "How to vote: double click!! No turning back!!";
       break;
     default:
       console.log("Please check language parameter!")

@@ -9,6 +9,8 @@ var Colors = mui.Styles.Colors;
 var AskResult = require('./ask-result.jsx');
 var VotedCheck = require('./svg-icons/voted-check.jsx');
 var LoginSel = require('./login-select.jsx');
+var Tooltip = require("react-tooltip");
+
 var VoteButton = React.createClass({
 
   getInitialState: function() {
@@ -119,7 +121,9 @@ var VoteButton = React.createClass({
             style={styles.yesButton}
             primary={true}
             disabled={voted}
-            onTouchTap={this._handleYesButtonTouched} >
+            onTouchTap={this._handleYesButtonTouched} 
+            data-tip data-event='click'
+            data-for="yesBt" >
             <TextField
               style={styles.yesText}
               underlineStyle={styles.underline}
@@ -130,6 +134,7 @@ var VoteButton = React.createClass({
               rowsMax={Number.MAX_VALUE}
               multiLine={true} />
           </FlatButton>
+          <Tooltip id="yesBt" ref="yestool" type="warning">{window.textSet.voteInfo}</Tooltip>
         </div>
         {showResult('yes')}
         <div style={{marginTop : 15}}>
@@ -139,7 +144,9 @@ var VoteButton = React.createClass({
             style={styles.noButton}
             secondary={true}
             disabled={voted}
-            onTouchTap={this._handleNoButtonTouched} >
+            onTouchTap={this._handleNoButtonTouched} 
+            data-tip data-event='click'
+            data-for="noBt" >
             <TextField
               style={styles.noText}
               underlineStyle={styles.underline}
@@ -150,6 +157,7 @@ var VoteButton = React.createClass({
               rowsMax={Number.MAX_VALUE}
               multiLine={true} />
           </FlatButton>
+          <Tooltip id="noBt" ref="notool" type="warning">{window.textSet.voteInfo}</Tooltip>
         </div>
         {showResult('no')}
         <Snackbar
